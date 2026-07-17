@@ -3,14 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.metrics import mean_squared_error, accuracy_score, classification_report, r2_score
-from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
-from sklearn.linear_model import LinearRegression, LogisticRegression
-import xgboost as xgb
-import shap
-from fpdf import FPDF
+# Deferred imports for faster app load
 import io
 import base64
 import pickle
@@ -292,11 +285,10 @@ if choice == "🏠  Home":
             if st.button("🧪 Try Sample Dataset", use_container_width=True):
                 with st.spinner("Loading synthetic dataset..."):
                     try:
-                        students = pd.read_csv(r"D:\CareerIQ_100K_Synthetic_Dataset\students.csv")
-                        placements = pd.read_csv(r"D:\CareerIQ_100K_Synthetic_Dataset\placement_results.csv")
-                        sample_df = pd.merge(students, placements, on="student_id", how="inner")
+                        url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+                        sample_df = pd.read_csv(url)
                         
-                        st.session_state.df = sample_df.head(2500)
+                        st.session_state.df = sample_df
                         st.session_state.clean_df = st.session_state.df.copy()
                         st.success("Sample Dataset Loaded! Go to 'Data Cleaning' or 'EDA' to begin.")
                     except Exception as e:
@@ -431,6 +423,7 @@ elif choice == "🧹  Data Cleaning":
         st.warning("Please upload a dataset first.")
 
 elif choice == "⚙️  Feature Engineering":
+    from sklearn.preprocessing import StandardScaler, LabelEncoder
     st.title("⚙️ Feature Engineering")
     if st.session_state.clean_df is not None:
         df = st.session_state.clean_df.copy()
@@ -537,6 +530,12 @@ elif choice == "📉  Interactive Charts":
         st.warning("Please upload a dataset first.")
 
 elif choice == "🧠  Machine Learning":
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.metrics import mean_squared_error, accuracy_score, classification_report, r2_score
+    from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+    from sklearn.linear_model import LinearRegression, LogisticRegression
+    import xgboost as xgb
     st.title("🧠 Machine Learning")
     if st.session_state.clean_df is not None:
         df = st.session_state.clean_df
@@ -632,6 +631,11 @@ elif choice == "🧠  Machine Learning":
         st.warning("Please upload a dataset first.")
 
 elif choice == "⚖️  Model Comparison":
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_squared_error, accuracy_score, r2_score
+    from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+    from sklearn.linear_model import LinearRegression, LogisticRegression
+    import xgboost as xgb
     st.title("⚖️ Model Comparison")
     if st.session_state.clean_df is not None and st.session_state.target_col is not None:
         df = st.session_state.clean_df
@@ -704,6 +708,9 @@ elif choice == "🎯  Predictions":
         st.warning("Please train a model first in the Machine Learning module.")
 
 elif choice == "🔍  Explainable AI":
+    import shap
+    from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+    import xgboost as xgb
     st.title("🔍 Explainable AI (SHAP)")
     if st.session_state.model is not None:
         if st.button("Generate SHAP Explanations"):
@@ -775,6 +782,8 @@ elif choice == "💡  AI Insights":
         st.warning("Please upload a dataset first.")
 
 elif choice == "📄  PDF Report":
+    from fpdf import FPDF
+    from sklearn.metrics import r2_score, accuracy_score
     st.title("📄 PDF Report Generation")
     st.write("Generate a simple PDF report summarizing the project.")
     
