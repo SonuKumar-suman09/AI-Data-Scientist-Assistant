@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.express as px
-import plotly.graph_objects as go
 # Deferred imports for faster app load
 import io
 import base64
@@ -479,6 +477,7 @@ elif choice == "📈  Exploratory Analysis":
         st.warning("Please clean or upload a dataset first.")
 
 elif choice == "📉  Interactive Charts":
+    import plotly.express as px
     st.title("📉 Interactive Charts")
     if st.session_state.clean_df is not None:
         df = st.session_state.clean_df
@@ -636,6 +635,7 @@ elif choice == "⚖️  Model Comparison":
     from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
     from sklearn.linear_model import LinearRegression, LogisticRegression
     import xgboost as xgb
+    import plotly.express as px
     st.title("⚖️ Model Comparison")
     if st.session_state.clean_df is not None and st.session_state.target_col is not None:
         df = st.session_state.clean_df
